@@ -72,6 +72,8 @@ PROGRAM COUNTER
 4-bit binary counters 74HC161 (U8 and U9) form an 8-bit presetttable Program Counter that is used to address the lower 8-bits of the ROM. The PC is incremented at the end of T8 so that it points to the next instruction in ROM.
 
 
+List of ICs.
+
 U1 74HC164 8-bit serial to parallel shift register  ACCUMULATOR
 
 U2 74HC74 dual D-type flipflop CARRY FF
