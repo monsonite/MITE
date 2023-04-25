@@ -54,3 +54,58 @@ MITE takes 10 clock cycles to execute an 8-bit instruction. However it is antici
 MITE is designed to execute bytecode languages in a mix of hardware and ROM based microcode. 
 The next step is to get MITE transferred from the simulator, to EagleCAD and a low cost 10x10cm pcb.
 
+
+Circuit Description.
+
+The heart of the circuit is the clock sequencer - a 74HC4017 decimal counter (U11) with 10 decoded outputs T0 to T9. These sequential pulses co-ordinate all timing operations of the CPU.
+
+A S-R latch (U14) set and reset by by T1 and T9 is used to gate the clock to provide a burst of 8 consecutive clock pulses. This pulse train GCLK is used to clock the 8-bit data through the various 8-bit shift registers. Timing signals T0 and T8 are used for other time sequenced operations.
+
+
+MITE has two principal shift registers A (Accumulator) and B (Bus). The Accumulator (U1) is a 74HC164 serial to parallel shift register and the Bus register (U3) is a 74HC165 parallel to serial 8-bit shift register. Both of these registers are clocked by the gated clock train GCLK. The B register is loaded from data stored in the 64K x 16-bit ROM (U7) on the rising edge of /T0.
+
+
+A LOAD instruction will take an 8-bit literal from the ROM, load it asynchronously into the B register, passing it a bit at a time, unmodified by the ALU,  so that it is loaded into the Accumulator register. This is how data is initialised into the Accumulator. The instruction $0000 is effectively a LOAD A, 00 which clears the previous contents of the Accumulator.
+
+PROGRAM COUNTER
+
+4-bit binary counters 74HC161 (U8 and U9) form an 8-bit presetttable Program Counter that is used to address the lower 8-bits of the ROM. The PC is incremented at the end of T8 so that it points to the next instruction in ROM.
+
+
+U1 74HC164 8-bit serial to parallel shift register  ACCUMULATOR
+
+U2 74HC74 dual D-type flipflop CARRY FF
+
+U3 74HC165 8-bit parallel to serial shift register B REGISTER
+
+U4 74HC595 8-bit serial to parallel 8-bit shift register (tristate)
+
+U5 74HC595 8-bit serial to parallel 8-bit shift register (tristate) MEMORY ADDRESS LOW
+
+U6 74HC595 8-bit serial to parallel 8-bit shift register (tristate) MEMORY ADDRESS HIGH
+
+U7 27C1024 64K x 16-bit ROM
+
+U8 74HC161 4-bit presettable counter   PROGRAM COUNTER
+
+U9 74HC161 4-bit presettable counter   PROGRAM COUNTER
+
+U10 62256 32K x 8 static RAM
+
+U11 74HC4017 decoded decade counter CLOCK SEQUENCER
+
+U12 28C16 2K x 8 EEPROM  SERIAL ALU
+
+U13  74HC541 octal buffer
+
+U14 74HC02 quad 2-input NOR
+
+U15 74HC04 hex inverter CLOCK OSCILLATOR and GLUE LOGIC
+
+U16
+
+U17
+
+
+
+
