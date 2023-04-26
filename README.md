@@ -71,6 +71,33 @@ PROGRAM COUNTER
 
 4-bit binary counters 74HC161 (U8 and U9) form an 8-bit presetttable Program Counter that is used to address the lower 8-bits of the ROM. The PC is incremented at the end of T8 so that it points to the next instruction in ROM.
 
+If a Jump instruction is executed, the Program Counter is loaded with the new value - taken from the value on the data bus.
+
+The upper 8 address lines of the are used to select a specific 256 byte page within the Instruction ROM. These page addressses are used to implement bytecode primitive instructions - such as from the MINT language.
+
+
+Memory Address Register.
+
+This consists of a pair of 74HC596 shift registers (U5 and U6). They can be loaded in sequence from the accumulator to form up to a 16-bit address for addressing the Static RAM. A further pair of devices (U16 and U17) form a serial half adder, so that the memory address register can be incremented at the end of each instruction cycle - so that it points to the next bytecode location in RAM.
+
+
+Bit Serial ALU.
+
+A bit serial ALU, as its name suggests processes two steams of bits supplied a pair at a time from the A and B shift registers. This serial approach is used to considerably reduce the amount of hardware required to perform ALU calculations, compared to a parallel ALU. 
+
+The bit serial ALU contains a full-adder, a pair of XOR gates to allow the A and B operands to be selectively inverted and a 2-input multiplexer.
+
+There is a little logic to allow the Carry input to be included at the start of the data stream, and some further logic to suppress the Carry when bitwise logical operations are being performed.
+
+
+The ALU uses the trick that the SUM output of two input bits is the XOR function, and the Carry output of two input bits is the AND function.  So the half-adder will generate both A XOR B and A AND B. The two input multiplexer can choose either the XOR function or the AND function. Furthermore, the multiplexer will also generate the A OR B function. So with very few gates we get the basic AND, OR and XOR functions - almost for free from the the full-adder. As well as the logic functions we ca get both Addition, ADD with Carry and Subtraction. The front end XOR gates allow A and B to be inverted  - which can provide Invert and Negate instructions.
+
+![image](https://user-images.githubusercontent.com/758847/234596132-f546abca-367d-4fb8-9782-367d4565eeba.png)
+ 
+It can be seen that a versatile bit serial ALU can be made with just 12 gates. This design served as a prototype, until the combinational logic above was assimilated into a small PROM (U12) as a functional look-up table. This PROM also incorporated the state logic for memory read and write operations and the jump logic.
+
+It is necessary to capture any carry that may be generated during any addition or subtraction operations. This Carry bit is held in the D-type flipflop (U2) so that it can be added into the next bit-sum.
+
 
 List of ICs.
 
