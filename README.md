@@ -1,5 +1,7 @@
 # MITE
-A minimal 8-bit processor using a Bit Serial Architecture
+
+
+## A minimal 8-bit processor using a Bit Serial Architecture
 
 ![image](https://user-images.githubusercontent.com/758847/234409029-9489b60c-7d9f-40b0-8f49-5583a58ca1bd.png)
 
@@ -19,7 +21,7 @@ Modern memory is all parallel access, so at some point we need to convert betwee
 We also need addressing registers that can form memory addresses of up to 16-bits. These addresses are parallel buses, so we might need to form them by using additional serial to parallel shift registers. We also need to build in flexibility in addressing modes, so that programming becomes easier.
 
 
-System Overview.
+## System Overview.
 
 
 The ALU provides AND, OR, XOR, INV, ADD, SUB and NEG instructions.
@@ -66,10 +68,10 @@ MITE is designed to execute bytecode languages in a mix of hardware and ROM base
 The next step is to get MITE transferred from the simulator, to EagleCAD and a low cost 10x10cm pcb.
 
 
-Circuit Description.
+## Circuit Description.
 
 
-Clock Sequencer and Timing Generator.
+### Clock Sequencer and Timing Generator.
 
 ![image](https://user-images.githubusercontent.com/758847/234841533-0a16b8bf-5db3-4445-8212-b78e0b851e0e.png)
 
@@ -82,7 +84,7 @@ Timing signals T0, T1 and T8 are used for other time sequenced operations.
 
 A hex inverter 74HC04 (U15) provides inverted versions of T0 and T8 used for other clocking and timing functions. Spare inverters in this package are used to form a crystal oscillator circuit (not shown)
 
-Principal Timing Pulses.
+### Principal Timing Pulses.
 
 T0  Loads the B register with data
 
@@ -97,14 +99,14 @@ T9  Terminates the clock gating pulse and restarts the sequence generator
 ![image](https://user-images.githubusercontent.com/758847/234836873-a4425002-45c9-4a9a-9964-720b61ee650a.png)
 
 
-Shift Registers.
+### Shift Registers.
 
 MITE has two principal shift registers A (Accumulator) and B (Bus). The Accumulator (U1) is a 74HC164 serial to parallel shift register and the Bus register (U3) is a 74HC165 parallel to serial 8-bit shift register. Both of these registers are clocked by the gated clock train GCLK. The B register is loaded from data stored in the 64K x 16-bit ROM (U7) on the rising edge of /T0.
 
 
 A LOAD instruction will take an 8-bit literal from the ROM, load it asynchronously into the B register, passing it a bit at a time, unmodified by the ALU,  so that it is loaded into the Accumulator register. This is how data is initialised into the Accumulator. The instruction $0000 is effectively a LOAD A, 00 which clears the previous contents of the Accumulator.
 
-PROGRAM COUNTER
+### Program Counter (PC).
 
 4-bit binary counters 74HC161 (U8 and U9) form an 8-bit presetttable Program Counter that is used to address the lower 8-bits of the ROM. The PC is incremented at the end of T8 so that it points to the next instruction in ROM.
 
@@ -113,12 +115,12 @@ If a Jump instruction is executed, the Program Counter is loaded with the new va
 The upper 8 address lines of the are used to select a specific 256 byte page within the Instruction ROM. These page addressses are used to implement bytecode primitive instructions - such as from the MINT language.
 
 
-Memory Address Register.
+### Memory Address Register (MAR).
 
 This consists of a pair of 74HC596 shift registers (U5 and U6). They can be loaded in sequence from the accumulator to form up to a 16-bit address for addressing the Static RAM. A further pair of devices (U16 and U17) form a serial half adder, so that the memory address register can be incremented at the end of each instruction cycle - so that it points to the next bytecode location in RAM.
 
 
-Bit Serial ALU.
+### Bit Serial ALU.
 
 A bit serial ALU, as its name suggests processes two steams of bits supplied a pair at a time from the A and B shift registers. This serial approach is used to considerably reduce the amount of hardware required to perform ALU calculations, compared to a parallel ALU. 
 
@@ -136,7 +138,7 @@ It can be seen that a versatile bit serial ALU can be made with just 12 gates. T
 It is necessary to capture any carry that may be generated during any addition or subtraction operations. This Carry bit is held in the D-type flipflop (U2) so that it can be added into the next bit-sum.
 
 
-List of ICs.
+## List of ICs.
 
 U1 74HC164 8-bit serial to parallel shift register  ACCUMULATOR
 
@@ -173,7 +175,7 @@ U16
 U17
 
 
-Instruction Set.
+## Instruction Set.
 
 The key to any simple processor is the ingenuity of its instruction set and architecture ISA. A clever instruction set can make the most out of minimal hardware. Examples of this are the PDP-8, the RCA 1802, the MOS 6502, Steve Wozniak's SWEET-16 virtual 16-bit machine and the Gigatron TTL Computer by the late Marcel van Kervinck. All of these processors have had an influence on MITE.
 
