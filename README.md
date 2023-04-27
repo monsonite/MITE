@@ -162,5 +162,13 @@ U16
 U17
 
 
+Instruction Set.
+
+The key to any simple processor is the ingenuity of its instruction set and architecture ISA. A clever instruction set can make the most out of minimal hardware. Examples of this are the PDP-8, the RCA 1802, the MOS 6502, Steve Wozniak's SWEET-16 virtual 16-bit machine and the Gigatron TTL Computer by the late Marcel van Kervinck. All of these processors have had an influence on MITE.
+
+A decision was made early on to use a 16-bit wide instruction word. This gives a lot more flexibility than an 8-bit word, and simplifies the instruction fetch cycle.
+
+The 16-bit instruction can conveniently be expressed as 4-bit or 8-bit hexadecimal fields. This simplifies the notation and makes the instructions more human readable, as well as making any assembler or C simulation easier to write. This concept came from the RCA 1802 and also Wozniak's Sweet-16.
+
 
 
