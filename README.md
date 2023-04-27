@@ -11,6 +11,17 @@ MITE is the 8-bit version of the more complex 16-bit SPIDER. It uses far fewer I
 MITE is based around a pair of 8-bit shift registers A (Accumulator) and B (Bus). These shift registers feed the data into the bit-serial ALU, which in an earlier update, has been reduced from 8 TTL packages to a single 512 byte table, in a small ROM.
 
 
+Whilst bit-serial architectures were widely used from the late 1940s until the 1970s, for calculators and computer systems that used serial access memory, parallel access memory and VLSI has largely made these machines redundant and obscure to today's Engineers. This project is to explore the earlier bit-serial methods and gain a better overall understanding.
+
+Modern memory is all parallel access, so at some point we need to convert between the parallel memory domain and the bit-serial ALU domain. This is done with the two shift registers A and B.  B accepts a parallel 8-bit word and converts it to serial, A acceps serial data and converts it back to a parallel byte. For simplicity this conversion process should only happen between the B and A registers, but that is not always easy to achieve. 
+
+
+We also need addressing registers that can form memory addresses of up to 16-bits. These addresses are parallel buses, so we might need to form them by using additional serial to parallel shift registers. We also need to build in flexibility in addressing modes, so that programming becomes easier.
+
+
+System Overview.
+
+
 The ALU provides AND, OR, XOR, INV, ADD, SUB and NEG instructions.
 
 
