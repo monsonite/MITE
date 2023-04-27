@@ -166,9 +166,15 @@ Instruction Set.
 
 The key to any simple processor is the ingenuity of its instruction set and architecture ISA. A clever instruction set can make the most out of minimal hardware. Examples of this are the PDP-8, the RCA 1802, the MOS 6502, Steve Wozniak's SWEET-16 virtual 16-bit machine and the Gigatron TTL Computer by the late Marcel van Kervinck. All of these processors have had an influence on MITE.
 
-A decision was made early on to use a 16-bit wide instruction word. This gives a lot more flexibility than an 8-bit word, and simplifies the instruction fetch cycle.
+A decision was made early on to use a 16-bit wide instruction word. This gives a lot more flexibility than an 8-bit word, and simplifies the instruction fetch cycle. It can be done very conveniently with a 16-bit x 64K AT27C1024 OTP ROM, although a pair of 28C256 EEPROM parts could alternatively be used during the development cycle.
 
 The 16-bit instruction can conveniently be expressed as 4-bit or 8-bit hexadecimal fields. This simplifies the notation and makes the instructions more human readable, as well as making any assembler or C simulation easier to write. This concept came from the RCA 1802 and also Wozniak's Sweet-16.
+
+The upper byte from ROM will be known as the instruction byte IR7:IR0.  The lower byte will be known as the data byte or payload byte D7:D0.
+
+The Instruction byte is split, for convenience, into two 4-bit fields IR7:IR4 and IR3:IR0.  IR7:IR4 define the ALU operation and IR3:IR0 define the data source or the addressing mode. 
+
+As stated above, the bit serial ALU can perform AND, OR, XOR, ADD, SUB operations on the contents of the Accumulator A, and the Bus Register B. It can also zero or invert A or B and provide negation (2s complement).
 
 
 
