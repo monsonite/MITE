@@ -106,9 +106,9 @@ MITE has two principal shift registers A (Accumulator) and B (Bus). The Accumula
 
 A LOAD instruction will take an 8-bit literal from the ROM, load it asynchronously into the B register, passing it a bit at a time, unmodified by the ALU,  so that it is loaded into the Accumulator register. This is how data is initialised into the Accumulator. The instruction $0000 is effectively a LOAD A, 00 which clears the previous contents of the Accumulator.
 
-### Program Counter (PC).
+### Program Counter (PC) and Microcode Instruction ROM.
 
-4-bit binary counters 74HC161 (U8 and U9) form an 8-bit presetttable Program Counter that is used to address the lower 8-bits of the ROM. The PC is incremented at the end of T8 so that it points to the next instruction in ROM.
+4-bit binary counters 74HC161 (U8 and U9) form an 8-bit presetttable Program Counter that is used to address the lower 8-bits of the 64K x 16-bit ROM. The PC is incremented at the end of T8 so that it points to the next instruction in ROM.
 
 If a Jump instruction is executed, the Program Counter is loaded with the new value - taken from the value on the data bus.
 
