@@ -62,7 +62,7 @@ Clock Sequencer and Timing Generator.
 
 The heart of the circuit is the clock sequencer - a 74HC4017 decimal counter (U11) with 10 decoded outputs T0 to T9. These sequential pulses co-ordinate all timing operations of the CPU.
 
-![image](https://user-images.githubusercontent.com/758847/234835180-9e6073ad-264f-4b09-813a-edca11e42034.png)
+![image](https://user-images.githubusercontent.com/758847/234836873-a4425002-45c9-4a9a-9964-720b61ee650a.png)
 
 
 Principal Timing Pulses.
@@ -71,7 +71,7 @@ T0  Loads the B register with data
 
 T1  Sets the carry bit if required and initialises the clock gating pulse
 
-T8  Inverted and used to clock the data into the parallel registers of the 74HC595
+T8  Inverted and used to clock the data into the parallel registers of the 74HC595. Increments the PC or forces a Jump
 
 T9  Terminates the clock gating pulse and restarts the sequence generator
 
