@@ -57,9 +57,26 @@ The next step is to get MITE transferred from the simulator, to EagleCAD and a l
 
 Circuit Description.
 
+
+Clock Sequencer and Timing Generator.
+
 The heart of the circuit is the clock sequencer - a 74HC4017 decimal counter (U11) with 10 decoded outputs T0 to T9. These sequential pulses co-ordinate all timing operations of the CPU.
 
-A S-R latch (U14) set and reset by by T1 and T9 is used to gate the clock to provide a burst of 8 consecutive clock pulses. This pulse train GCLK is used to clock the 8-bit data through the various 8-bit shift registers. Timing signals T0 and T8 are used for other time sequenced operations.
+![image](https://user-images.githubusercontent.com/758847/234835180-9e6073ad-264f-4b09-813a-edca11e42034.png)
+
+
+Principal Timing Pulses.
+
+T0  Loads the B register with data
+
+T1  Sets the carry bit if required and initialises the clock gating pulse
+
+T8  Inverted and used to clock the data into the parallel registers of the 74HC595
+
+T9  Terminates the clock gating pulse and restarts the sequence generator
+
+
+A S-R latch (U14) set and reset by by T1 and T9 is used to gate (GATE) the clock to provide a burst of 8 consecutive clock pulses. This pulse train GCLK is used to clock the 8-bit data through the various 8-bit shift registers. Timing signals T0 and T8 are used for other time sequenced operations.
 
 
 MITE has two principal shift registers A (Accumulator) and B (Bus). The Accumulator (U1) is a 74HC164 serial to parallel shift register and the Bus register (U3) is a 74HC165 parallel to serial 8-bit shift register. Both of these registers are clocked by the gated clock train GCLK. The B register is loaded from data stored in the 64K x 16-bit ROM (U7) on the rising edge of /T0.
