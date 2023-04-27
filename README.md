@@ -67,7 +67,7 @@ The heart of the circuit is the clock sequencer - a 74HC4017 decimal counter (U1
 
 A S-R latch (U14) made from a 74HC02 quad 2-input NOR, is set and reset by by T1 and T9 is used to gate (GATE) the clock to provide a burst of 8 consecutive clock pulses. This pulse train GCLK is used to clock the 8-bit data through the various 8-bit shift registers. Timing signals T0 and T8 are used for other time sequenced operations.
 
-A hex inverter 74HC04 (U15) provides inverted versions of T0 and T8 used for other clocking and timing functions.
+A hex inverter 74HC04 (U15) provides inverted versions of T0 and T8 used for other clocking and timing functions. Spare inverters in this package are used to form a crystal oscillator circuit (not shown)
 
 Principal Timing Pulses.
 
