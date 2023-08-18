@@ -117,7 +117,9 @@ The upper 8 address lines of the are used to select a specific 256 byte page wit
 
 ### Memory Address Register (MAR).
 
-This consists of a pair of 74HC596 shift registers (U5 and U6). They can be loaded in sequence from the accumulator to form up to a 16-bit address for addressing the Static RAM. A further pair of devices (U16 and U17) form a serial half adder, so that the memory address register can be incremented at the end of each instruction cycle - so that it points to the next bytecode location in RAM.
+This consists of a pair of 74HC595 shift registers (U5 and U6). They can be loaded in sequence from the accumulator to form up to a 16-bit address for addressing the Static RAM. A further pair of devices (U16 and U17) form a serial half adder, so that the memory address register can be incremented at the end of each instruction cycle - so that it points to the next bytecode location in RAM.
+
+This scheme for the MAR has subsequently been replaced with a pair of 74HC161 4-bit counters to address the low 8 address lines of the RAM and a 74HC573 register to address the upper (page) address of the RAM.
 
 
 ### Bit Serial ALU.
@@ -162,13 +164,13 @@ U10 62256 32K x 8 static RAM
 
 U11 74HC4017 decoded decade counter CLOCK SEQUENCER
 
-U12 28C16 2K x 8 EEPROM  SERIAL ALU
+U12 28C16 2K x 8 EEPROM  BIT-SERIAL ALU
 
 U13  74HC541 octal buffer
 
-U14 74HC02 quad 2-input NOR
+U14 74HC02 quad 2-input NOR for clock gating
 
-U15 74HC04 hex inverter CLOCK OSCILLATOR and GLUE LOGIC
+U15 74HC04 hex inverter for CLOCK OSCILLATOR and GLUE LOGIC
 
 U16
 
