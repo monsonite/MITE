@@ -238,9 +238,50 @@ Below is a screen shot of the latest pcb laayout.  Not shown are the internal VC
 
 For various reasons this MITE design has taken on a very large influence from the Gigatron TTL Computer. The MITE could be considered to be a cousin of the Gigatron - but uses a bit-serial ALU for reduction in hardware complexity.
 
+The Gigatron uses a 16-bit wide instruction ROM, which outputs an 8-bit wide instruction IR7:IR0 and an 8-bit data (or payload) word D7:D0.
+
+There are 8 principle instructions defined by the opcode field IR7:IR5.
+
+The next field IR4:IR2 defines the addressing mode for memory referencing instructions. For jump or branch instructions it defines if there is a condition attached to the Jump operation.
+
+The remaining instruction field IR1:IR0 defines the source of the data that will be placed on the bus. There are 4 sources of data, A the Accumulator, D the Data word from the lower byte of the instruction word (a constant or an address), O the output from the currently addressed RAM address and I, an 8-bit input from a shift register - used to input external data from an external source such as a serial (PS/2) keyboard or a microcontroller - sucha as an Arduino.
+
+This table summarises the Gigatron instruction set:
+
+![image](https://github.com/monsonite/MITE/assets/758847/a7b039d4-28e8-4155-b1ea-5a55e5c5f358)
+
+The SRAM is addressed by a pair of registers X and Y. X is formed from a pair of presettable 4-bit counters, driving memory address lines MA7:MA0 to allow incremental addressing (count) or jumping (load) within a 256 byte page. 
+
+The Y register is an octal latch that addresses MA15:MA8. This allows Y to select a given 256 byte page of RAM and X to increment like a PC within the selected page.
+
+There are other possible instruction set possibilities, but theat of the Gigatron is concise and easily decoded in hardware.
+  
+
+##Hardware Reduction
+
 The Gigatron uses 38 IC packages - and is primarily intended to generate colour graphics of 1/4 VGA resolution and sound for games playing.  The MITE is intended to be a more control application focussed system with a wide range of GPIO and SPI implemented in native hardware.
 
-However, by implementing the ALU as a bit serial device contained in a modest sized ROM - significant savings can be made to the hardware chip count - about a 30% reduction to 24 parts or fewer. This provides a major saving in component costs and pcb size.
+However, by implementing the ALU as a bit serial device contained in a modest sized ROM - significant savings can be made to the hardware chip count - about a 30% reduction from 38 devices to 24 parts or fewer. This provides a major saving in component costs and pcb size.
+
+##Hardware Capabilities.
+
+MITE is best described as a cousin of the Gigatron that uses a bit-serial ALU in order to reduce package count - but at the trade-off af a reduced instruction rate.
+
+MITE is intended for tasks that normally would be performed by an 8-bit microcontroller - such as a PIC, or AVR, but with the educational benefit that it is built from discrete ICs - and very few of them.
+
+MITE provides both parallel and serial GPIO and SPI connectivity:
+
+8-bit parallel input port
+
+8-bit parallel output port
+
+10 MHz SPI dual bidirectional port (MCP23S17).
+
+Native SPI expansion using 74HC299 universal shift register
+
+8 LEDs for status or data supply.
+
+Industry standard SPI memory - Flash, SRAM or FRAM in 8 pin DIP
 
 
 
