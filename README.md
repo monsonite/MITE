@@ -7,18 +7,44 @@
 
 In a quest for a truly minimal computer, that can be built from readily available 74HC components on a low cost pcb, I have settled on a novel 8-bit, bit-serial architecture - a design that I call MITE.
 
-MITE is the 8-bit version of the more complex 16-bit SPIDER. It uses far fewer ICs, and was designed as a learning exercise in bit serial architectures.
+MITE is the 8-bit version of the more complex 16-bit SPIDER. It uses far fewer ICs, and was designed as an Educational exercise in bit-serial architectures.
 
+Any CPU will consist of several different building blocks: ALU, ROM, RAM, Control Unit, I/O.
+
+MITE has all of these blocks, but mostly finds novel ways to reduce the hardware used in the ALU. Much of the rest of the system is fairly standard, based around parallel ROM and RAM and an 8-bit internal databus.
+
+The bit serial ALU should be treated as a sub-system. Parallel Input data is serialised, processed one (pair) of bits at a time and the de-serialised for output to the rest of the parallel 8-bit memory bus system.
+
+It is a hybrid system, with modern parallel addresses memory, but using a very minimal hardware bit serial ALU.
+
+## Bit-Serial ALU
 
 MITE is based around a pair of 8-bit shift registers A (Accumulator) and B (Bus). These shift registers feed the data into the bit-serial ALU, which in an earlier update, has been reduced from 8 TTL packages to a single 512 byte table, in a small ROM.
 
+The discrete ALU features a full-adder capable of ADD and SUB, an inversion stage, for NEG and INV,  and a 2 input multiplexer to select between AND, XOR and OR boolean functions.
+
+This can be reduced to just 4 quad 74HCxx packages  - plus a flip-flop to retain any intermediate carry.
+
+However co-ordinating this ALU needs a 3 chip clock and timing signal generator, plus additional chips to control the instruction, carry and other input signals.
+
+So any bit-serial ALU carries an overhead of several control unit chips.
+
+However a lot of the discrete logic devices can be replaced by a small ROM of 256 or 512 bytes.
+
+##History
 
 Whilst bit-serial architectures were widely used from the late 1940s until the 1970s, for calculators and computer systems that used serial access memory, parallel access memory and VLSI has largely made these machines redundant and obscure to today's Engineers. This project is to explore the earlier bit-serial methods and gain a better overall understanding.
 
-Modern memory is all parallel access, so at some point we need to convert between the parallel memory domain and the bit-serial ALU domain. This is done with the two shift registers A and B.  B accepts a parallel 8-bit word and converts it to serial, A acceps serial data and converts it back to a parallel byte. For simplicity this conversion process should only happen between the B and A registers, but that is not always easy to achieve. 
+## Serial meets Parallel
+
+Modern memory is all parallel access, so at some point we need to convert between the parallel memory domain and the bit-serial ALU domain. This is done with the two shift registers A and B.  
+
+B accepts a parallel 8-bit word and converts it to serial, A accepts serial data and converts it back to a parallel byte. For simplicity this conversion process should only happen between the B and A registers, but that is not always easy to achieve. 
 
 
-We also need addressing registers that can form memory addresses of up to 16-bits. These addresses are parallel buses, so we might need to form them by using additional serial to parallel shift registers. We also need to build in flexibility in addressing modes, so that programming becomes easier.
+We also need addressing registers that can form memory addresses of up to 16-bits. These addresses are parallel buses, so we might need to form them by using additional serial to parallel shift registers. 
+
+We also need to build in flexibility in addressing modes, so that programming becomes easier.
 
 
 ## System Overview.
