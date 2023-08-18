@@ -232,6 +232,14 @@ Below is a screen shot of the latest pcb laayout.  Not shown are the internal VC
 
 ![image](https://github.com/monsonite/MITE/assets/758847/ae818401-7ffe-4449-8ee5-87532eead28c)
 
+## Instruction Set - Update.
+
+For various reasons this MITE design has taken on a very large influence from the Gigatron TTL Computer. The MITE could be considered to be a cousin of the Gigatron - but uses a bit-serial ALU for reduction in hardware complexity.
+
+The Gigatron uses 38 IC packages - and is primarily intended to generate colour graphics of 1/4 VGA resolution and sound for games playing.  The MITE is intended to be a more control application focussed system with a wide range of GPIO and SPI implemented in native hardware.
+
+However, by implementing the ALU as a bit serial device contained in a modest sized ROM - significant savings can be made to the hardware chip count - about a 30% reduction to 24 parts or fewer. This provides a major saving in component costs and pcb size.
+
 
 
 
