@@ -190,4 +190,49 @@ The Instruction byte is split, for convenience, into two 4-bit fields IR7:IR4 an
 As stated above, the bit serial ALU can perform AND, OR, XOR, ADD, SUB operations on the contents of the Accumulator A, and the Bus Register B. It can also zero or invert A or B and provide negation (2s complement).
 
 
+## UPDATE August 2023
+
+Following a successful simulation using H.Neemann's "Digital" simulator, I have been working on an EagleCAD schematic and layout on a cheap 10x10cm pcb.
+
+From the basic CPU - I wanted to extend it to include general purpose parallel I/O and also native SPI in hardware.
+
+I have therefore made the following improvements:
+
+1 An 8-bit parallel output port.
+  
+2 An 8-bit parallel input port - both have direct access to the parallel data bus.
+ 
+3 An 8-bit serial to parallel output port - implemented using a 74HC595
+ 
+4 A 74HC595 used to drive 8 LEDs - to show cpu data/status etc.
+  
+5 A 40 pin IDC connector that mimics the data and address and control lines of a 6502.
+
+6 Reset switch, User button and USB connector for 5V supply.
+ 
+7 A 74HCT139 for selecting data source to be put on bus. The spare half is used to select the I/O port and generate Slave Select signals (/SS) for external SPI devices.
+ 
+8 RAM has been extended to 128Kx8. An 8-bit presettable counter is used to address the lower bits. An octal register is used to address the upper address lines. Address line A16 can be toggled  to access the unused 64K bytes.  The use of the counter for the lower addresses lines means that MINT source code can easily be stepped through, character by character. The upper address register  can be loaded to jump to a different User routine on a new page boundary.
+ 
+The Instruction and data ROM can be accessed from any source of data on the bus. This could be text stored in the program RAM, or an external device such as an SPI source, a keyboard or any other source of ascii character data.
+
+The ALU ROM has been extended to 64Kx16 bits. The will allow significantly more combinational control logic to be incorporated into this single device. 16 inputs and 16 outputs The original ALU ROM was just 256 bytes!
+
+These changes, particulary adding sensible I/O and RAM addressing have added 5 chips to the original cpu "core" design, so it now uses 21 packages. However it massively increases the usefulness and usability of the system, effectively transforming it from a CPU to a full microcomputer.
+
+As I suggested yesterday, this is effectively a Gigatron - a modified Harvard architecture, but implements the ALU as a bit serial design in a single ROM, rather than 8-bit parallel ALU that used 8, 74HC153 multiplexer chips and two 74HC283 adders. Additionaly, much of the Control Unit logic, 6 chips and and a diode matrix of 30 diodes has been eliminated by putting the logic into the larger ROM.
+
+The biggest takeaway from this project has been the challenges of getting a bit-serial ALU, to interface efficiently with a parallel memory system.  The bit-serial ALU could notionally be treated as a black box, which has a parallel to serial input interface, and a serial to parallel, output interface, with only these two connection points to what is otherwise a 8-bit parallel data bus.
+
+The advantage of the bit-serial ALU, and ROM based combinational logic is a reduction from 38 IC packages to just 21, plus all the advantages of a much smaller pcb, enhanced I/O capabilities, lower overall costs and native SPI connectivity.(The Gigatron requires another 5 I/O packages and SPI bit banged in software).
+
+The MITE could always be used as an I/O slave peripheral processor to the Gigatron.
+
+Below is a screen shot of the latest pcb laayout.  Not shown are the internal VCC and GND planes - this is now a 4-layer board. Note that there are packages and other components underneath the wider ROM and ROM parts. As these parts will be socketed, there will be plenty room to stack them like this. The line of 8 diodes under the ROM is the Zero flag detector!
+
+![image](https://github.com/monsonite/MITE/assets/758847/ae818401-7ffe-4449-8ee5-87532eead28c)
+
+
+
+
 
