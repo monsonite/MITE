@@ -31,15 +31,19 @@ So any bit-serial ALU carries an overhead of several control unit chips.
 
 However a lot of the discrete logic devices can be replaced by a small ROM of 256 or 512 bytes.
 
-##History
+## History
 
-Whilst bit-serial architectures were widely used from the late 1940s until the 1970s, for calculators and computer systems that used serial access memory, parallel access memory and VLSI has largely made these machines redundant and obscure to today's Engineers. This project is to explore the earlier bit-serial methods and gain a better overall understanding.
+Whilst bit-serial architectures were widely used from the late 1940s until the 1970s, for calculators and mainframe computer (Cambridge EDSAC 1948) systems that used serial access memory, parallel access memory and VLSI has largely made these machines redundant and obscure to today's Engineers. 
+
+This project is to explore the earlier bit-serial methods and gain a better overall understanding.
 
 ## Serial meets Parallel
 
-Modern memory is all parallel access, so at some point we need to convert between the parallel memory domain and the bit-serial ALU domain. This is done with the two shift registers A and B.  
+Modern memory is all parallel access, so at some point we need to convert between the parallel memory domain and the bit-serial ALU domain. This is done with the two shift registers A and B. 
 
-B accepts a parallel 8-bit word and converts it to serial, A accepts serial data and converts it back to a parallel byte. For simplicity this conversion process should only happen between the B and A registers, but that is not always easy to achieve. 
+A is a 74HC164 serial to parallel shift register and B is a 74HC165 parallel to serial shift register. We will also use the 74HC595, which is serial to parallel but with a latching register and tristate data bus capabilities. The other device of interest is the 74HC299 - a universal bi-directional shift register that can convert 8-bit data to and from an 8-bit bus to the serial domain.
+
+Back to the basic bit serial ALU, B accepts a parallel 8-bit word and converts it to serial, A accepts serial data and converts it back to a parallel byte. For simplicity this conversion process should only happen between the B and A registers, but that is not always easy to achieve. 
 
 
 We also need addressing registers that can form memory addresses of up to 16-bits. These addresses are parallel buses, so we might need to form them by using additional serial to parallel shift registers. 
