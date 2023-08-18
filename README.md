@@ -242,19 +242,25 @@ The Gigatron uses a 16-bit wide instruction ROM, which outputs an 8-bit wide ins
 
 There are 8 principle instructions defined by the opcode field IR7:IR5.
 
-The next field IR4:IR2 defines the addressing mode for memory referencing instructions. For jump or branch instructions it defines if there is a condition attached to the Jump operation.
+The ALU provides AND, OR, XOR, INV, ADD, SUB and NEG instructions.
 
-The remaining instruction field IR1:IR0 defines the source of the data that will be placed on the bus. There are 4 sources of data, A the Accumulator, D the Data word from the lower byte of the instruction word (a constant or an address), O the output from the currently addressed RAM address and I, an 8-bit input from a shift register - used to input external data from an external source such as a serial (PS/2) keyboard or a microcontroller - sucha as an Arduino.
+The next field IR4:IR2 defines the addressing mode for memory referencing instructions. For jump or branch instructions it defines if there is a conditional attached to the Jump operation.
+
+The remaining instruction field IR1:IR0 defines the source of the data that will be placed on the bus. 
+
+There are 4 sources of data, A the Accumulator, D the Data word from the lower byte of the instruction word (a constant or an address), O the output from the currently addressed RAM address and I, an 8-bit input from a shift register - used to input external data from an external source such as a serial (PS/2) keyboard or a microcontroller - such as an Arduino.
 
 This table summarises the Gigatron instruction set:
 
 ![image](https://github.com/monsonite/MITE/assets/758847/a7b039d4-28e8-4155-b1ea-5a55e5c5f358)
 
-The SRAM is addressed by a pair of registers X and Y. X is formed from a pair of presettable 4-bit counters, driving memory address lines MA7:MA0 to allow incremental addressing (count) or jumping (load) within a 256 byte page. 
+The SRAM is addressed by a pair of registers X and Y. 
+
+X is formed from a pair of presettable 4-bit counters, driving memory address lines MA7:MA0 to allow incremental addressing (count) or jumping (load) within a 256 byte page. 
 
 The Y register is an octal latch that addresses MA15:MA8. This allows Y to select a given 256 byte page of RAM and X to increment like a PC within the selected page.
 
-There are other possible instruction set possibilities, but theat of the Gigatron is concise and easily decoded in hardware.
+There are other possible instruction set possibilities, but that of the Gigatron is concise and easily decoded in hardware.
   
 
 ##Hardware Reduction
