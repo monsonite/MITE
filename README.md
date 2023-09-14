@@ -106,24 +106,21 @@ The next step is to get MITE transferred from the simulator, to EagleCAD and a l
 ![image](https://user-images.githubusercontent.com/758847/234841533-0a16b8bf-5db3-4445-8212-b78e0b851e0e.png)
 
 
-The heart of the circuit is the clock sequencer - a 74HC4017 decimal counter (U11) with 10 decoded outputs T0 to T9. These sequential pulses co-ordinate all timing operations of the CPU.
+The heart of the circuit is the clock sequencer - a 74HC4017 decimal counter (U11) with 10 decoded outputs T0 to T9. These sequential pulses co-ordinate all timing operations of the CPU. Only T0,T1,T8 and T9 are used to control the system timing.
 
 A S-R latch (U14) made from a 74HC02 quad 2-input NOR, is set and reset by by T1 and T9 is used to gate (GATE) the clock to provide a burst of 8 consecutive clock pulses. This pulse train GCLK is used to clock the 8-bit data through the various 8-bit shift registers. 
-
-Timing signals T0, T1 and T8 are used for other time sequenced operations.
 
 A hex inverter 74HC04 (U15) provides inverted versions of T0 and T8 used for other clocking and timing functions. Spare inverters in this package are used to form a crystal oscillator circuit (not shown)
 
 ### Principal Timing Pulses.
 
-T0  Loads the B register with data
+T0 Loads the B shift register with 8-bits of data from the data bus. If there is a Carry from the previous bit operation set this during timing state T0.
 
-T1  Sets the carry bit if required and initialises the clock gating pulse
+T1 Set the SR latch to gate 8 clock pulses to GCLK. 
 
-T8  Inverted and used to clock the data into the parallel registers of the 74HC595. Increments the PC or forces a Jump
+T8 Use inverted T8 to clock the final transient contents of the Accumulator (Shift Register A) into the output register of a 74HC595, thus latching it for a whole timing sequence. Increments the PC or forces a Jump
 
-T9  Terminates the clock gating pulse and restarts the sequence generator
-
+T9 Reset the SR latch thus terminating the burst of 8 gated clock pulses, until the next T1.
 
 
 ![image](https://user-images.githubusercontent.com/758847/234836873-a4425002-45c9-4a9a-9964-720b61ee650a.png)
