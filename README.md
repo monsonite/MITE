@@ -158,7 +158,7 @@ The bit serial ALU contains a full-adder, a pair of XOR gates to allow the A and
 There is a little logic to allow the Carry input to be included at the start of the data stream, and some further logic to suppress the Carry when bitwise logical operations are being performed.
 
 
-The ALU uses the trick that the SUM output of two input bits is the XOR function, and the Carry output of two input bits is the AND function.  So the half-adder will generate both A XOR B and A AND B. The two input multiplexer can choose either the XOR function or the AND function. Furthermore, the multiplexer will also generate the A OR B function. So with very few gates we get the basic AND, OR and XOR functions - almost for free from the the full-adder. As well as the logic functions we ca get both Addition, ADD with Carry and Subtraction. The front end XOR gates allow A and B to be inverted  - which can provide Invert and Negate instructions.
+The ALU uses the trick that the SUM output of two input bits is the XOR function, and the Carry output of two input bits is the AND function.  So the half-adder will generate both A XOR B and A AND B. The two input multiplexer can choose either the XOR function or the AND function. Furthermore, the multiplexer will also generate the A OR B function. So with very few gates we get the basic AND, OR and XOR functions - almost for free from the the full-adder. As well as the logic functions we can get both Addition, ADD with Carry and Subtraction. The front end XOR gates allow A and B to be inverted  - which can provide Invert and Negate instructions.
 
 ![image](https://user-images.githubusercontent.com/758847/234596132-f546abca-367d-4fb8-9782-367d4565eeba.png)
  
