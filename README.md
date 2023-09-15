@@ -290,13 +290,13 @@ The Y register is an octal latch that addresses MA15:MA8. This allows Y to selec
 There are other possible instruction set possibilities, but that of the Gigatron is concise and easily decoded in hardware.
   
 
-##Hardware Reduction
+## Hardware Reduction
 
 The Gigatron uses 38 IC packages - and is primarily intended to generate colour graphics of 1/4 VGA resolution and sound for games playing.  The MITE is intended to be a more control application focussed system with a wide range of GPIO and SPI implemented in native hardware.
 
 However, by implementing the ALU as a bit serial device contained in a modest sized ROM - significant savings can be made to the hardware chip count - about a 30% reduction from 38 devices to 24 parts or fewer. This provides a major saving in component costs and pcb size.
 
-##Hardware Capabilities.
+## Hardware Capabilities.
 
 MITE is best described as a cousin of the Gigatron that uses a bit-serial ALU in order to reduce package count - but at the trade-off af a reduced instruction rate.
 
@@ -315,6 +315,35 @@ Native SPI expansion using 74HC299 universal shift register
 8 LEDs for status or data supply.
 
 Industry standard SPI memory - Flash, SRAM or FRAM in 8 pin DIP
+
+
+## UPDATE 15th September 2023
+
+In an attempt to partition the bit serial ALU and it's supporting timing pulse generator from the parallel memory interface, creating specific parallel->serial-> parallel interfaces I have created a 32 pin "module" for the serial circuitry. It has an 8-bit parallel input and a separate 8-bit tristate parallel output.
+
+It currently uses just 8 ICs, so is very compact.
+
+The ALU is reduced to a small EPROM. It could be replaced with a much faster GAL22V10 with the limit to clock frequency being dictated by the various shift registers.
+
+There is a 74HC4017 to generate the timing states T0 to T9. Of these only T0, T1, T8 and T9 are used to control the system. Timing states T0, T1, T8 and T9 are also brought out and can be used to coordinate ROM and RAM access.
+
+A quad NOR used to gate the 8 clock pulses to form the gated clock burst GCLK.
+
+A 74HC165 converts parallel data from the bus into serial bitstream B, and combines it with data from the Accumulator 74HC164 in the ALU.
+
+Once the 8 bits are processed the result from the Accumulator is latched into a 74HC595 which has tristate parallel outputs back to the databus.
+
+A zero detector outputs on the Z pin and any carry produced is output on the C pin.
+
+There are about 36 flipflops in this design, and a 256 byte look-up table in the PROM. I guess that it would be a good contender for a small CPLD.
+
+I am trying to see if I can eliminate the 74HC164 and just use the 74HC595 as the Accumulator - still working on that.
+
+
+![image](https://github.com/monsonite/MITE/assets/758847/43e31319-2e15-4a1f-a020-dc377d11d213)
+
+
+
 
 
 
