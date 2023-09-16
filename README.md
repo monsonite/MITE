@@ -342,6 +342,45 @@ I am trying to see if I can eliminate the 74HC164 and just use the 74HC595 as th
 
 ![image](https://github.com/monsonite/MITE/assets/758847/43e31319-2e15-4a1f-a020-dc377d11d213)
 
+## More About the Instruction Set
+
+With the generic bit serial ALU and timing generator reduced to just 6 chips, I can effectively park that problem and focus on other aspects of the architecture.
+
+From my dealings with Gigatron, it became clear that a 16-bit wide instruction had significantly more clout than 8-bits, and allows at least 8 if not 12 bits to be used for addressing memory. 
+
+The AT27C1024 is a low cost 64K x 16-bit OTP EPROM with a 45nS access time. Incidentally, the cost of reprogrammable EEPROM seems to have gone through the roof, post pandemic and still suffering from supply chain problems.
+
+So I was brought up with the Z80, and I like the organisational structure that the A, BC, DE, HL  (etc) registers bring to the programming task. Whilst I am considerably less familiar with the 6502, I appreciate the benefits of the zero page RAM for frequently used variables and general scratch pad use.
+
+It is likely that any code written for MITE, will be generated from TASM-32, or a custom Python script. We no longer have to commit to memory raw opcodes in hex, like we did 45 years ago. Modern tools allow so much faster progress.
+
+So the primary goal of MITE, is to create a BSA machine capable of executing a bytecode language from RAM, or other data source.
+
+John Hardy, Craig Jones and I wrote MINT a couple of years back, as a means of creating an extremely lightweight, human readable, interpreted Forth-like language. We used the Z80 as our guinea pig cpu, and the MINT interpreter was reduced to about 1700 lines of Z80 ASM. Whilst not fast, about 40,000 16-bit adds per second, it was a proof of concept, and a springboard to other ideas.
+
+At the same time Chris Curl was working on a similar tiny language S4, after Sandor Schneider had introduced us to his bytecoded "STABLE" tiny-Forthlike language.
+
+The next task I see in this project is to create an optimised CPU design, for the efficient execution of bytecoded languages.
+
+From our experiences with MINT, John Hardy and I found that with a plethora of 16-bit registers, named a->z, that the traditional stack operations from Forth such as DUP, DROP, SWAP and OVER, had less of a role to play when programming in MINT. Instead the registers took a more primary function with temporary data storage. This is good news for the programmer - you no longer to do a whole lot of mental stack juggling to find something that is buried 4 or 6 layers down.
+
+The ALU provides just 8 basic instructions.
+
+LOAD
+AND
+OR
+XOR
+ADD
+SUB
+STORE
+JUMP
+
+These are coded into the bits IR6:IR4 of the instruction register.
+
+IR7 is the indirection bit, if set it means use the contents of memory addressed by the remainder of the instruction register. If unset, it means use the 8-bit literal contained in the payload byte of the instruction.
+
+The lower 4 bits IR3:IR0 are used to select one of 16 pseudo registers stored in RAM. These will be treated as 8-bit registers if IR0=0 or eight, 16-bit register pairs (BC, DE, HL etc) if IR0=1.
+
 
 
 
